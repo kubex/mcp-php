@@ -1,0 +1,16 @@
+{
+  "name": "kubex/mcp",
+  "description": "MCP (Model Context Protocol) server library for PHP — JSON-RPC 2.0 based",
+  "license": "BSD-3-Clause",
+  "require": {
+    "php": "^8.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Kubex\\MCP\\": "src/"
+    },
+    "classmap": [
+      "src/Protocol.php"
+    ]
+  }
+}
