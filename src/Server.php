@@ -44,7 +44,8 @@ class Server
       return $this->_errorResponse($req->id, JSONRPCError::INVALID_REQUEST, 'Invalid JSON-RPC version');
     }
 
-    $workspaceID = $headers['x-kx-workspace-id'] ?? $headers['X-Workspace-ID'] ?? $headers['x-workspace-id'] ?? '';
+    // Extract workspace ID from kubex transport header
+    $workspaceID = $headers['x-kx-workspace-id'] ?? '';
 
     $result = null;
     $error = null;
