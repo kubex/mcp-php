@@ -44,7 +44,7 @@ class Server
       return $this->_errorResponse($req->id, JSONRPCError::INVALID_REQUEST, 'Invalid JSON-RPC version');
     }
 
-    $workspaceID = $headers['X-Workspace-ID'] ?? $headers['x-workspace-id'] ?? '';
+    $workspaceID = $headers['x-kx-workspace-id'] ?? $headers['X-Workspace-ID'] ?? $headers['x-workspace-id'] ?? '';
 
     $result = null;
     $error = null;
@@ -70,7 +70,7 @@ class Server
         $result = $this->_handleToolsList();
         break;
       case 'tools/call':
-        [$result, $error] = $this->_handleToolsCall($workspaceID, $req->params);
+        [$result, $error] = $this->_handleToolsCall($workspaceID, $req->params, $headers);
         break;
       default:
         $error = new JSONRPCError(JSONRPCError::METHOD_NOT_FOUND, 'Method not found');
@@ -173,7 +173,7 @@ class Server
     return ['tools' => $tools];
   }
 
-  private function _handleToolsCall(string $workspaceID, mixed $params): array
+  private function _handleToolsCall(string $workspaceID, mixed $params, array $headers = []): array
   {
     if(empty($params))
     {
@@ -189,7 +189,7 @@ class Server
         try
         {
           /** @var CallToolResult $result */
-          $result = ($handler->call)($workspaceID, $p->arguments);
+          $result = ($handler->call)($workspaceID, $p->arguments, $headers);
           return [$result->toArray(), null];
         }
         catch(\Throwable $e)
